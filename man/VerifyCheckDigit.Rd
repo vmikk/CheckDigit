@@ -29,4 +29,7 @@ VerifyCheckDigit('21340', 'Verhoeff')  # FALSE
 VerifyCheckDigit('13240', 'Verhoeff')  # FALSE
 VerifyCheckDigit('12430', 'Verhoeff')  # FALSE
 VerifyCheckDigit('12304', 'Verhoeff')  # FALSE
+
+VerifyCheckDigit('5724', 'Damm')  # TRUE
+VerifyCheckDigit('5274', 'Damm')  # FALSE
 }

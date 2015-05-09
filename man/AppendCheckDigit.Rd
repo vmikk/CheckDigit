@@ -28,4 +28,5 @@
 
 \examples{
 AppendCheckDigit('1234', 'Verhoeff') # 12340
+AppendCheckDigit('1234', 'Damm') # 12340
 }
