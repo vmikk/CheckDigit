@@ -39,7 +39,13 @@ AppendCheckDigit.Damm <- function(x){
 		warning('Non-digit characters are disregarded in check digit calculation')
 	}
 
-	y <- sapply(x, function(x){ paste(x, Damm(x), sep='') })
+	y <- sapply(x, function(x){
+					if (x %in% c('', NA, NaN)) {
+						return(x)
+					} else {
+						return( paste(x, Damm(x), sep='') )
+					}
+		})
 	return(y)
 }
 
@@ -51,7 +57,13 @@ VerifyCheckDigit.Damm <- function(x){
 		warning('Non-digit characters are disregarded in check digit calculation')
 	}
 
-	y <- sapply(x, function(x){ Damm(x) == 0 })
+	y <- sapply(x, function(x){
+					if (x %in% c('', NA, NaN)) {
+						return(FALSE)
+					} else {
+						return( Damm(x) == 0 )
+					}
+		})
 	return(y)
 }
 
