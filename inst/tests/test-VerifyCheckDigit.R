@@ -110,3 +110,58 @@ test_that('Verhoeff check digit detects all single adjacent transpositions', {
     }
     rm(i)
 })
+
+
+
+###
+### DAMM ALGORITHM
+###
+
+context('Damm algorithm')
+
+test_that('VerifyCheckDigit.Damm gives a warning when stripping non-digit characters', {
+    expect_that(VerifyCheckDigit('867-5309', 'Damm'), gives_warning('Non-digit characters are disregarded in check digit calculation'))
+})
+
+test_that('VerifyCheckDigit.Damm returns correct responses', {
+
+    ## Missing values should return FALSE
+    expect_that(VerifyCheckDigit('', 'Damm'), is_equivalent_to(FALSE))
+    expect_that(VerifyCheckDigit(as.character(NA), 'Damm'), is_equivalent_to(FALSE))
+    expect_that(suppressWarnings(VerifyCheckDigit(as.character(NaN), 'Damm')), is_equivalent_to(FALSE))
+
+    ## Character arguments
+    expect_that(VerifyCheckDigit('13', 'Damm'), is_equivalent_to(TRUE))
+    expect_that(VerifyCheckDigit('12340', 'Damm'), is_equivalent_to(TRUE))
+    expect_that(VerifyCheckDigit('86753095', 'Damm'), is_equivalent_to(TRUE))
+    expect_that(VerifyCheckDigit('92233720368547758089', 'Damm'), is_equivalent_to(TRUE))
+
+    ## Vectorized arguments
+    expect_that(
+        VerifyCheckDigit(
+            c('', '13', '12340', '86753095', '92233720368547758089'),
+            'Damm'
+        ),
+        is_equivalent_to(
+            c(FALSE, TRUE, TRUE, TRUE, TRUE)
+        )
+    )
+})
+
+
+
+# test_that('Damm check digit detects all single digit substitutions', {
+#     for (i in SingleDigitSubstitutions('86753098')) {
+#         expect_that(VerifyCheckDigit(i, 'Damm'), is_equivalent_to(FALSE))
+#     }
+#     rm(i)
+# })
+
+# test_that('Damm check digit detects all single adjacent transpositions', {
+#     for (i in SingleAdjacentTranspositions('86753098')) {
+#         expect_that(VerifyCheckDigit(i, 'Damm'), is_equivalent_to(FALSE))
+#     }
+#     rm(i)
+# })
+
+## Damm algorithm doesn't pass check with 'SingleDigitSubstitutions' or 'SingleAdjacentTranspositions'

@@ -50,3 +50,39 @@ test_that('AppendCheckDigit.Verhoeff returns correct values', {
         )
     )
 })
+
+
+###
+### DAMM ALGORITHM
+###
+
+context('Damm algorithm')
+
+test_that('AppendCheckDigit.Damm gives a warning when stripping non-digit characters', {
+    expect_that(AppendCheckDigit('867-5309', 'Damm'), gives_warning('Non-digit characters are disregarded in check digit calculation'))
+})
+
+test_that('AppendCheckDigit.Damm returns correct values', {
+
+    ## Missing values should receive no check digit
+    expect_that(AppendCheckDigit('', 'Damm'), is_equivalent_to(''))
+    expect_that(AppendCheckDigit(as.character(NA), 'Damm'), is_equivalent_to(as.character(NA)))
+    expect_that(suppressWarnings(AppendCheckDigit(as.character(NaN), 'Damm')), is_equivalent_to(as.character(NaN)))
+
+    ## Character arguments
+    expect_that(AppendCheckDigit('1', 'Damm'), is_equivalent_to('13'))
+    expect_that(AppendCheckDigit('1234', 'Damm'), is_equivalent_to('12340'))
+    expect_that(AppendCheckDigit('8675309', 'Damm'), is_equivalent_to('86753095'))
+    expect_that(AppendCheckDigit('9223372036854775808', 'Damm'), is_equivalent_to('92233720368547758089'))
+
+    ## Vectorized arguments
+    expect_that(
+        AppendCheckDigit(
+            c('', '1', '1234', '8675309', '9223372036854775808'),
+            'Damm'
+        ),
+        is_equivalent_to(
+            c('', '13', '12340', '86753095', '92233720368547758089')
+        )
+    )
+})
